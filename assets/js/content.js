@@ -135,8 +135,8 @@ window.CONTENT = {
             caption: "Bằng Độc quyền Giải pháp Hữu ích Số 4647 (Page 1)",
             img: "assets/img/certs/patent-4647-itutor.webp",
             width: 1400,
-            height: 1811,
-            alt: "Vietnamese Utility Solution Patent No. 4647 cover page for Remote Learning Support System (patent owner name and residential addresses redacted)"
+            height: 1812,
+            alt: "Vietnamese Utility Solution Patent No. 4647 cover page for Remote Learning Support System"
           },
           {
             certId: "patent-4647-annex",
@@ -146,8 +146,8 @@ window.CONTENT = {
             caption: "Lists 3. NHỮ NHẬT BẢO ANH (VN) among Patented Co-Authors",
             img: "assets/img/certs/patent-4647-authors-annex.webp",
             width: 1400,
-            height: 1049,
-            alt: "Official Danh sách kèm theo annex page of Vietnamese Utility Solution Patent No. 4647 listing Nhu Nhat Bao Anh among the authors (residential addresses redacted)"
+            height: 1051,
+            alt: "Official Danh sách kèm theo annex page of Vietnamese Utility Solution Patent No. 4647 listing Nhu Nhat Bao Anh among the authors"
           }
         ],
         recognitions: [
@@ -536,8 +536,8 @@ window.CONTENT = {
       year: "2025",
       img: "assets/img/certs/patent-4647-itutor.webp",
       width: 1400,
-      height: 1811,
-      alt: "Vietnamese Utility Solution Patent No. 4647 cover page for Remote Learning Support System (patent owner and residential addresses redacted)"
+      height: 1812,
+      alt: "Vietnamese Utility Solution Patent No. 4647 cover page for Remote Learning Support System"
     },
     {
       id: "patent-4647-annex",
@@ -548,8 +548,8 @@ window.CONTENT = {
       year: "2025",
       img: "assets/img/certs/patent-4647-authors-annex.webp",
       width: 1400,
-      height: 1049,
-      alt: "Official Danh sách kèm theo annex page of Vietnamese Utility Solution Patent No. 4647 listing Nhu Nhat Bao Anh among the authors (residential addresses redacted)"
+      height: 1051,
+      alt: "Official Danh sách kèm theo annex page of Vietnamese Utility Solution Patent No. 4647 listing Nhu Nhat Bao Anh among the authors"
     },
     {
       id: "cert-kide-2021-silver",
@@ -608,8 +608,8 @@ window.CONTENT = {
       year: "2025",
       img: "assets/img/certs/2025-hanoi-city-excellent-student.webp",
       width: 1400,
-      height: 1081,
-      alt: "Hanoi Department of Education and Training certificate of participation for Grade 12 City-Level Literature Examination (date of birth redacted)"
+      height: 1082,
+      alt: "Hanoi Department of Education and Training certificate of participation for Grade 12 City-Level Literature Examination"
     },
     {
       id: "cert-grade10-excellence",
