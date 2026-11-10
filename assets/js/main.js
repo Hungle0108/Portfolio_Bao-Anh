@@ -57,7 +57,17 @@
       .join("");
   }
 
-  // 2B. Render Section 03 — Experience: Magazine Case Study (TokyoLife Brand Communication Internship)
+  // 2A. Render Interests Tag Row (Section 02 — Form 02.02 / 02.06–02.09)
+  var interestsMount = document.getElementById("interests-tag-mount");
+  if (interestsMount && data.about && data.about.interests) {
+    interestsMount.innerHTML = data.about.interests
+      .map(function (item) {
+        return '<span class="interest-tag">' + esc(item.label) + "</span>";
+      })
+      .join("");
+  }
+
+  // 2B. Render Section 03 — Experience: Magazine Case Study (TokyoLife + hidden Format slot)
   var experienceMount = document.getElementById("experience-mount");
   if (experienceMount && data.experience) {
     var exp = data.experience;
@@ -89,6 +99,47 @@
       })
       .join("");
 
+    var formatSlotHtml = "";
+    if (exp.formatSlot) {
+      var fs = exp.formatSlot;
+      formatSlotHtml =
+        '<article class="experience-case-study format-draft-slot todo" style="margin-top:2rem">' +
+        '<span class="patent-badge">Second Internship Slot · Form ' +
+        esc(fs.formId) +
+        " (Hidden in Production)</span>" +
+        '<h3 class="patent-title" style="margin-bottom:0.5rem">' +
+        esc(fs.company) +
+        "</h3>" +
+        '<div class="todo todo-badge">' +
+        esc(fs.roleTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.datesTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.responsibilitiesTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.campaignsTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.contributionsTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.toolsTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.resultsTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.learningTodo) +
+        "</div> " +
+        '<div class="todo todo-badge">' +
+        esc(fs.evidenceTodo) +
+        "</div>" +
+        "</article>";
+    }
+
     experienceMount.innerHTML =
       '<article class="experience-case-study">' +
       '<div class="case-study-top-grid">' +
@@ -111,6 +162,9 @@
       '<div class="cnm-lens-callout">' +
       esc(exp.cnmFraming) +
       "</div>" +
+      (exp.tokyoLifeTodos
+        ? '<div class="todo todo-badge">' + esc(exp.tokyoLifeTodos) + "</div>"
+        : "") +
       "</div>" +
       '<aside class="case-study-quote-col" aria-label="Internship reference letter endorsement">' +
       '<blockquote class="case-pull-quote">' +
@@ -142,12 +196,11 @@
       ")</span></div>" +
       '<div class="case-tools-item"><strong>Discipline:</strong> Communication Management + Data-Driven New Media</div>' +
       "</div>" +
-      "</article>";
+      "</article>" +
+      formatSlotHtml;
   }
 
-  // 3. Render Two Separate Invention Project Dossiers (Section 04)
-  // Keeps only the Patent No. 4647 plates as visual previews in Section 03;
-  // international awards open the lightbox via compact recognition rows.
+  // 3. Render Two Separate Invention Project Case Studies (Section 04)
   var inventionProjectsMount = document.getElementById("invention-projects-mount");
   if (inventionProjectsMount && data.invention && data.invention.projects) {
     inventionProjectsMount.innerHTML = data.invention.projects
@@ -222,7 +275,7 @@
         if (proj.recognitions && proj.recognitions.length) {
           recognitionsHtml =
             '<div class="project-recognitions-box">' +
-            '<div class="project-recognitions-title">Verified Recognitions &amp; Lightbox Previews · ' +
+            '<div class="project-recognitions-title">Awards &amp; Gallery · ' +
             esc(proj.title.split(" — ")[0]) +
             "</div>" +
             '<div class="project-recognitions-list">' +
@@ -258,6 +311,12 @@
             "</div>";
         }
 
+        var caseTodosHtml = (proj.caseFieldsTodo || [])
+          .map(function (t) {
+            return '<div class="todo todo-badge">' + esc(t) + "</div> ";
+          })
+          .join("");
+
         return (
           '<article id="' +
           esc(proj.id) +
@@ -276,15 +335,18 @@
           '<div class="cnm-lens-callout">' +
           esc(proj.cnmLens) +
           "</div>" +
-          '<p class="patent-desc"><strong>Project Overview:</strong> ' +
+          '<p class="patent-desc"><strong>Overview:</strong> ' +
           esc(proj.description) +
           "</p>" +
-          '<p class="patent-desc"><strong>Co-Inventors &amp; Recognition:</strong> ' +
+          '<p class="patent-desc"><strong>Team &amp; Verified Attribution:</strong> ' +
           esc(proj.teamAndHonors) +
           "</p>" +
-          '<div class="todo todo-badge">' +
-          esc(proj.todoNote) +
-          "</div>" +
+          (proj.myRoleTodo
+            ? '<div class="motivation-gap-box todo" style="margin-top:0.75rem"><strong>My Role (To Be Confirmed by Bao Anh):</strong> ' +
+              esc(proj.myRoleTodo) +
+              "</div>"
+            : "") +
+          (caseTodosHtml ? '<div style="margin-top:0.5rem">' + caseTodosHtml + "</div>" : "") +
           "</div>" +
           '<div class="project-narrative-side">' +
           '<dl class="patent-meta-grid">' +
@@ -462,11 +524,22 @@
 
   var honorsInventionMount = document.getElementById("honors-invention-mount");
   var honorsAcademicMount = document.getElementById("honors-academic-mount");
+  var honorsVolunteeringMount = document.getElementById("honors-volunteering-mount");
   if (honorsInventionMount && data.honors) {
     honorsInventionMount.innerHTML = renderHonorList(data.honors.invention);
   }
   if (honorsAcademicMount && data.honors) {
     honorsAcademicMount.innerHTML = renderHonorList(data.honors.academic);
+  }
+  if (honorsVolunteeringMount && data.honors && data.honors.volunteeringTodo) {
+    honorsVolunteeringMount.innerHTML =
+      '<h3 class="honors-group-title">III · Volunteering &amp; Community Impact</h3>' +
+      '<div class="motivation-gap-box">' +
+      "<strong>" +
+      esc(data.honors.volunteeringTodo.title) +
+      ":</strong> " +
+      esc(data.honors.volunteeringTodo.detail) +
+      "</div>";
   }
 
   // 6. Render Academics (Section 06)
@@ -607,7 +680,172 @@
       .join("");
   }
 
-  // 7. Render Certificate Archive Gallery (Section 07)
+  // 6B. Render Section 07 — Skills & Tools (Form Tab 07 SKILLS)
+  var skillsMount = document.getElementById("skills-mount");
+  if (skillsMount && data.skills) {
+    var commCardsHtml = (data.skills.communication || [])
+      .map(function (c) {
+        var certBtn = c.certId
+          ? '<div style="margin-top:0.65rem"><button type="button" class="cert-inline-btn" data-cert-id="' +
+            esc(c.certId) +
+            '">Verified Certificate ↗</button></div>'
+          : "";
+        return (
+          '<article class="skill-card">' +
+          '<div class="skill-card-top">' +
+          '<span class="skill-period">Form ' +
+          esc(c.formId) +
+          " · " +
+          esc(c.period) +
+          "</span>" +
+          "</div>" +
+          '<h4 class="skill-title">' +
+          esc(c.skill) +
+          "</h4>" +
+          '<div class="skill-proof-role"><strong>Proving Role:</strong> <a href="#leadership">' +
+          esc(c.proofRole) +
+          "</a></div>" +
+          '<p class="skill-detail">' +
+          esc(c.detail) +
+          "</p>" +
+          certBtn +
+          "</article>"
+        );
+      })
+      .join("");
+
+    var toolsHtml =
+      (data.skills.tools && data.skills.tools.verified ? data.skills.tools.verified : [])
+        .map(function (t) {
+          return (
+            '<div class="tool-verified-card">' +
+            '<div class="tool-context">' +
+            esc(t.context) +
+            "</div>" +
+            '<h4 class="tool-name">' +
+            esc(t.name) +
+            "</h4>" +
+            '<p class="tool-detail">' +
+            esc(t.detail) +
+            "</p>" +
+            "</div>"
+          );
+        })
+        .join("");
+
+    var langsHtml = (data.skills.languages || [])
+      .map(function (l) {
+        return (
+          '<div class="test-card">' +
+          '<div class="test-card-top">' +
+          '<span class="test-name">Language · Form ' +
+          esc(l.formId) +
+          "</span>" +
+          '<span class="test-date">' +
+          esc(l.level) +
+          "</span>" +
+          "</div>" +
+          '<div class="test-score" style="font-size:1.45rem">' +
+          esc(l.language) +
+          "</div>" +
+          '<div class="test-breakdown">' +
+          esc(l.detail) +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+
+    skillsMount.innerHTML =
+      '<div class="skills-layout">' +
+      '<div class="skills-comm-block">' +
+      '<h3 class="sub-heading">I · Communication &amp; Public Relations Competencies (Linked to Proving Roles)</h3>' +
+      '<div class="skills-comm-grid">' +
+      commCardsHtml +
+      "</div>" +
+      (data.skills.communicationEvidenceTodo
+        ? '<div class="todo todo-badge" style="margin-top:0.85rem">' +
+          esc(data.skills.communicationEvidenceTodo) +
+          "</div>"
+        : "") +
+      "</div>" +
+      '<div class="editorial-grid" style="margin-top:2.5rem">' +
+      '<div class="academics-left">' +
+      '<h3 class="sub-heading">II · Analytical &amp; Creative Media Tools</h3>' +
+      '<div class="tools-verified-list">' +
+      toolsHtml +
+      "</div>" +
+      (data.skills.tools && data.skills.tools.toolsTodo
+        ? '<div class="motivation-gap-box todo" style="margin-top:1rem">' +
+          esc(data.skills.tools.toolsTodo) +
+          "</div>"
+        : "") +
+      "</div>" +
+      '<div class="academics-right">' +
+      '<h3 class="sub-heading">III · Languages &amp; Certified Proficiency</h3>' +
+      '<div class="test-cards">' +
+      langsHtml +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>";
+  }
+
+  // 6C. Render Section 08 — Vision (Form Tab 08 MY VISION, merged with CNM Motivation Box)
+  var visionMount = document.getElementById("vision-mount");
+  if (visionMount && data.vision) {
+    var vis = data.vision;
+    var pillarsHtml = (vis.pillars || [])
+      .map(function (p) {
+        return (
+          '<article class="vision-pillar-card">' +
+          '<div class="vision-pillar-id">' +
+          esc(p.label) +
+          "</div>" +
+          '<p class="vision-pillar-prompt">' +
+          esc(p.prompt) +
+          "</p>" +
+          '<div class="motivation-gap-box todo" style="margin-top:0.65rem">' +
+          esc(p.todoText) +
+          "</div>" +
+          "</article>"
+        );
+      })
+      .join("");
+
+    visionMount.innerHTML =
+      '<div class="vision-dossier">' +
+      '<div class="vision-header-split">' +
+      '<div class="vision-lead">' +
+      '<span class="patent-badge">Intended Major · ' +
+      esc(vis.headlineField) +
+      "</span>" +
+      '<h3 class="patent-title">Connecting ' +
+      esc(vis.headlineField) +
+      " &amp; " +
+      esc(vis.broaderField) +
+      "</h3>" +
+      '<p class="patent-desc" style="margin-top:0.75rem;margin-bottom:0">' +
+      esc(vis.editorialSummary) +
+      "</p>" +
+      "</div>" +
+      '<div class="vision-meta-box">' +
+      "<div><strong>HEADLINE FIELD (01.04)</strong><span>" +
+      esc(vis.headlineField) +
+      "</span></div>" +
+      "<div><strong>BROADER DISCIPLINE</strong><span>" +
+      esc(vis.broaderField) +
+      "</span></div>" +
+      "<div><strong>FOUNDATION</strong><span>Literature Specialization · Brand Communication · Patented EdTech &amp; AI</span></div>" +
+      "</div>" +
+      "</div>" +
+      '<div class="vision-pillars-grid todo">' +
+      pillarsHtml +
+      "</div>" +
+      "</div>";
+  }
+
+  // 7. Render Certificate Archive Gallery (Section 09)
   var archiveMount = document.getElementById("archive-grid-mount");
   var archiveCountEl = document.getElementById("archive-count");
   if (archiveMount && data.certificates) {
